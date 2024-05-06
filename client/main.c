@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     struct sockaddr_in address;
-    bzero(&address, sizeof(address));
+    memset(&address, 0, sizeof(address));
 
     address.sin_family = AF_INET;   // Typ adresu
     address.sin_port = htons(PORT); // Port (przekonwertowany do big-endian)
@@ -38,17 +38,27 @@ int main(int argc, char *argv[])
     }
     if (connect(sockfd, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
-        perror("Nie udało się połączyć z serwerem");
+        perror("Unable to connect");
         exit(EXIT_FAILURE);
     }
 
-    printf("Połączono z %s:%d\n", server_ip, PORT);
+    printf("Connected with %s:%d\n", server_ip, PORT);
 
-    // Możesz tutaj dodać dalsze interakcje z serwerem...
-    // ...
+    char buffer[BUFF_MAX];
+    memset(&buffer, 0, sizeof(buffer));
 
-    // Zamknięcie gniazda po zakończeniu pracy
+    ssize_t bytesReceived = recv(sockfd, buffer, sizeof(buffer) - 1, 0);
+    if (bytesReceived < 0)
+    {
+        perror("Error receiving data");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
+
+    buffer[bytesReceived] = '\O';
+
+    printf("Received message: ", buffer);
+
     close(sockfd);
-
     return 0;
 }

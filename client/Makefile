@@ -1,4 +1,4 @@
 RUN:
 	gcc -o ./main main.c
 
-	./main 0.0.0.0
+	./main 127.0.0.1
