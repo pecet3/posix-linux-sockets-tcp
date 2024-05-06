@@ -3,7 +3,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <strings.h>
+#include <string.h>
 #include <unistd.h>
 
 #define PORT 8090
@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
     struct sockaddr_in address;
     memset(&address, 0, sizeof(address));
 
-    address.sin_family = AF_INET;   // Typ adresu
-    address.sin_port = htons(PORT); // Port (przekonwertowany do big-endian)
+    address.sin_family = AF_INET;
+    address.sin_port = htons(PORT);
 
     if (inet_pton(AF_INET, server_ip, &address.sin_addr.s_addr) <= 0)
     {
@@ -55,9 +55,9 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    buffer[bytesReceived] = '\O';
+    buffer[bytesReceived] = '\0';
 
-    printf("Received message: ", buffer);
+    printf("Received message:%s", buffer);
 
     close(sockfd);
     return 0;
